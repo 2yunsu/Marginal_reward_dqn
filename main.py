@@ -6,7 +6,7 @@ import torch
 
 ## Include the replay experience
 
-epochs = 1000
+epochs = 10
 gamma = 0.9 #since it may take several moves to goal, making gamma high
 epsilon = 1
 model = Q_learning(64, [150,150], 4, hidden_unit)
@@ -15,12 +15,13 @@ optimizer = optim.RMSprop(model.parameters(), lr = 1e-2)
 criterion = torch.nn.MSELoss()
 buffer = 80
 BATCH_SIZE = 40
-memory = ReplayMemory(buffer)   
+memory = ReplayMemory(buffer)
 
 for i in range(epochs):
     state = initGridPlayer()
     status = 1
     step = 0
+    reward_memory = []
     #while game still in progress
     while(status == 1):   
         v_state = Variable(torch.from_numpy(state)).view(1,-1)
@@ -34,14 +35,16 @@ for i in range(epochs):
         step +=1
         v_new_state = Variable(torch.from_numpy(new_state)).view(1,-1)
         #Observe reward
-        reward = getReward(new_state)
+        reward, fruit = getReward(new_state, reward_memory, action)
+        reward_memory.append(fruit)
         memory.push(v_state.data, action, v_new_state.data, reward)
         if (len(memory) < buffer): #if buffer not filled, add to it
             state = new_state
-            if reward != -1: #if reached terminal state, update game status
-                break
-            else:
-                continue
+            # if reward != -1: #if reached terminal state, update game status
+            #     break
+            # else:
+            #     continue
+            continue
         transitions = memory.sample(BATCH_SIZE)
         batch = Transition(*zip(*transitions))
         state_batch = Variable(torch.cat(batch.state))
@@ -84,6 +87,9 @@ for i in range(epochs):
 ## Here is the test of AI
 def testAlgo(init=0):
     i = 0
+    reward = 0
+    reward_memory = []
+
     if init==0:
         state = initGrid()
     elif init==1:
@@ -103,14 +109,17 @@ def testAlgo(init=0):
         print('Move #: %s; Taking action: %s' % (i, action))
         state = makeMove(state, action)
         print(dispGrid(state))
-        reward = getReward(state)
-        if reward != -1:
-            status = 0
-            print("Reward: %s" % (reward,))
+        reward, fruit = getReward(state, reward_memory, action)
+        reward_memory.append(fruit)
+        print("reward: ", reward)
+        # if reward != -1:
+        #     status = 0
+        #     print("Reward: %s" % (reward,))
         i += 1 #If we're taking more than 10 actions, just stop, we probably can't win this game
         if (i > 10):
             print("Game lost; too many moves.")
             break
+    print("Reward: %s" % (reward,))
 
 
 testAlgo(init=1)
