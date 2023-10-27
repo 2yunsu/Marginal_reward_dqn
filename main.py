@@ -6,8 +6,8 @@ import torch
 
 ## Include the replay experience
 
-epochs = 10
-gamma = 0.9 #since it may take several moves to goal, making gamma high
+epochs = 100
+gamma = 0.7 #since it may take several moves to goal, making gamma high
 epsilon = 1
 model = Q_learning(64, [150,150], 4, hidden_unit)
 optimizer = optim.RMSprop(model.parameters(), lr = 1e-2)
@@ -18,10 +18,11 @@ BATCH_SIZE = 40
 memory = ReplayMemory(buffer)
 
 for i in range(epochs):
-    state = initGridPlayer()
+    state = initGrid()
     status = 1
     step = 0
     reward_memory = []
+    reward_sum = 0
     #while game still in progress
     while(status == 1):   
         v_state = Variable(torch.from_numpy(state)).view(1,-1)
@@ -35,9 +36,10 @@ for i in range(epochs):
         step +=1
         v_new_state = Variable(torch.from_numpy(new_state)).view(1,-1)
         #Observe reward
-        reward, fruit = getReward(new_state, reward_memory, action)
-        reward_memory.append(fruit)
-        memory.push(v_state.data, action, v_new_state.data, reward)
+        reward, reward_obj = getReward(new_state, reward_memory, action)
+        reward_sum += reward
+        reward_memory.append(reward_obj)
+        memory.push(v_state.data, action, v_new_state.data, reward_sum)
         if (len(memory) < buffer): #if buffer not filled, add to it
             state = new_state
             # if reward != -1: #if reached terminal state, update game status
@@ -85,9 +87,9 @@ for i in range(epochs):
         epsilon -= (1/epochs)
 
 ## Here is the test of AI
-def testAlgo(init=0):
+def testAlgo(init=1):
     i = 0
-    reward = 0
+    reward_sum = 0
     reward_memory = []
 
     if init==0:
@@ -109,9 +111,10 @@ def testAlgo(init=0):
         print('Move #: %s; Taking action: %s' % (i, action))
         state = makeMove(state, action)
         print(dispGrid(state))
-        reward, fruit = getReward(state, reward_memory, action)
-        reward_memory.append(fruit)
-        print("reward: ", reward)
+        reward, reward_obj = getReward(state, reward_memory, action)
+        reward_sum += reward
+        reward_memory.append(reward_obj)
+        print("reward: ", reward_sum)
         # if reward != -1:
         #     status = 0
         #     print("Reward: %s" % (reward,))
@@ -122,4 +125,4 @@ def testAlgo(init=0):
     print("Reward: %s" % (reward,))
 
 
-testAlgo(init=1)
+testAlgo(init=0)

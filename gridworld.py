@@ -33,13 +33,16 @@ def findLoc(state, obj):
 def initGrid():
     state = np.zeros((4,4,4))
     #place player
-    state[0,1] = np.array([0,0,0,1])
+    state[0,0] = np.array([0,0,0,1])
     #place wall
-    state[2,2] = np.array([0,0,1,0])
+    state[1,0] = np.array([0,0,1,0])
+    state[2,0] = np.array([0,0,1,0])
     #place pit
-    state[1,1] = np.array([0,1,0,0])
+    state[0,1] = np.array([0,1,0,0])
+    state[0,2] = np.array([0,1,0,0])
     #place goal
-    state[3,3] = np.array([1,0,0,0])
+    state[1,1] = np.array([1,0,0,0])
+    state[1,2] = np.array([1,0,0,0])
     return state
 
 #Initialize player in random location, but keep wall, goal and pit stationary
@@ -104,9 +107,9 @@ def makeMove(state, action):
     #e.g. up => (player row - 1, player column + 0)
     new_loc = (player_loc[0][0] + actions[action][0], player_loc[0][1] + actions[action][1])
 
-    if (new_loc != wall[0]):
-        if ((np.array(new_loc) <= (3,3)).all() and (np.array(new_loc) >= (0,0)).all()):
-            state[new_loc][3] = 1
+    # if (new_loc != wall[0]): #벽 제한
+    if ((np.array(new_loc) <= (3,3)).all() and (np.array(new_loc) >= (0,0)).all()):
+        state[new_loc][3] = 1
 
     new_player_loc = findLoc(state, np.array([0,0,0,1]))
     if (not new_player_loc):
@@ -138,21 +141,27 @@ def getReward(state, reward_memory, action):
     player_loc = getLoc(state, 3)
     pit = getLoc(state, 1)
     goal = getLoc(state, 0)
+    wall = getLoc(state, 2)
     marginal_rate = 0.9
     n_goal = reward_memory.count('goal')
     n_pit = reward_memory.count('pit')
+    n_wall = reward_memory.count('wall')
+    for i in range(len(wall)):
+        if (player_loc[0] == wall[i]):
+            reward = 10.0*(marginal_rate**n_wall)
+            return reward, "wall"
     for i in range(len(pit)):
         if (player_loc[0] == pit[i]):
-            reward = -10.0*marginal_rate**n_pit
+            reward = 10.0*(marginal_rate**n_pit)
             return reward, "pit"
     for i in range(len(goal)):
         if (player_loc[0] == goal[i]):
-            reward = 10.0*marginal_rate**n_goal
+            reward = 10.0*(marginal_rate**n_goal)
             return reward, "goal"
     if action == 4:
-        return 0, "_"
+        return 0, "stay"
     else:
-        return -1, "_"
+        return -1, "move"
 
     
 def dispGrid(state):
