@@ -34,10 +34,11 @@ def initGrid():
     state = np.zeros((4,4,4))
     #place player
     state[0,0] = np.array([0,0,0,1])
-    state[3,3] = np.array([0,0,0,1])
-    #place wall
+    
+    #place player2
+    state[3,3] = np.array([0,0,1,0])
     # state[0,1] = np.array([0,0,1,0])
-    #place pit
+    #place goal_2
     state[0,1] = np.array([0,1,0,0])
     state[0,2] = np.array([0,1,0,0])
     state[0,3] = np.array([0,1,0,0])
@@ -55,14 +56,14 @@ def initGrid():
     state[3,2] = np.array([1,0,0,0])
     return state
 
-#Initialize player in random location, but keep wall, goal and pit stationary
+#Initialize player in random location, but keep goal and goal_2 stationary
 def initGridPlayer():
     state = np.zeros((4,4,4))
     #place player
     state[randPair(0,4)] = np.array([0,0,0,1])
-    #place wall
+    #place player2
     state[2,2] = np.array([0,0,1,0])
-    #place pit
+    #place goal_2
     state[1,1] = np.array([0,1,0,0])
     state[1,0] = np.array([0,1,0,0])
     #place goal
@@ -70,9 +71,9 @@ def initGridPlayer():
     state[1,3] = np.array([1,0,0,0])
     
     a = findLoc(state, np.array([0,0,0,1])) #find grid position of player (agent)
-    w = findLoc(state, np.array([0,0,1,0])) #find wall
+    w = findLoc(state, np.array([0,0,1,0])) #find player2
     g = findLoc(state, np.array([1,0,0,0])) #find goal
-    p = findLoc(state, np.array([0,1,0,0])) #find pit
+    p = findLoc(state, np.array([0,1,0,0])) #find goal_2
 
     # if (not a or not w or not g or not p):
     #     #print('Invalid grid. Rebuilding..')
@@ -80,14 +81,14 @@ def initGridPlayer():
     
     return state
 
-#Initialize grid so that goal, pit, wall, player are all randomly placed
+#Initialize grid so that goal, goal_2, player2, player are all randomly placed
 def initGridRand():
     state = np.zeros((4,4,4))
     #place player
     state[randPair(0,4)] = np.array([0,0,0,1])
-    #place wall
+    #place player2
     state[randPair(0,4)] = np.array([0,0,1,0])
-    #place pit
+    #place goal_2
     state[randPair(0,4)] = np.array([0,1,0,0])
     #place goal
     state[randPair(0,4)] = np.array([1,0,0,0])
@@ -108,19 +109,18 @@ def makeMove(state, action, player):
     #need to locate player in grid
     #need to determine what object (if any) is in the new grid spot the player is moving to
     player_loc = findLoc(state, np.array([0,0,0,1]))
-    wall = findLoc(state, np.array([0,0,1,0]))
+    player2_loc = findLoc(state, np.array([0,0,1,0]))
     goal = findLoc(state, np.array([1,0,0,0]))
-    pit = findLoc(state, np.array([0,1,0,0]))
+    goal_2 = findLoc(state, np.array([0,1,0,0]))
     state = np.zeros((4,4,4))
 
-    actions = [[-1,0],[1,0],[0,-1],[0,1],[0,0]]
+    actions = [[-1,0],[1,0],[0,-1],[0,1]]
     #e.g. up => (player row - 1, player column + 0)
-
     if player == True:
         new_loc = (player_loc[0][0] + actions[action][0], player_loc[0][1] + actions[action][1])
-        old_loc = (player_loc[1][0], player_loc[1][1])
+        old_loc = (player2_loc[0][0], player2_loc[0][1])
     if player == False:
-        new_loc = (player_loc[1][0] + actions[action][0], player_loc[1][1] + actions[action][1])
+        new_loc = (player2_loc[0][0] + actions[action][0], player2_loc[0][1] + actions[action][1])
         old_loc = (player_loc[0][0], player_loc[0][1])
 
     # if (new_loc != wall[0]): #벽 제한
@@ -128,24 +128,29 @@ def makeMove(state, action, player):
         (np.array(new_loc) >= (0,0)).all() and
         (new_loc != old_loc)
         ):
-        state[new_loc][3] = 1
-        state[old_loc][3] = 1
+        if player == True:
+            state[new_loc][3] = 1
+            state[old_loc][2] = 1
+        if player == False:
+            state[new_loc][2] = 1
+            state[old_loc][3] = 1
     new_player_loc = findLoc(state, np.array([0,0,0,1]))
-    if (not new_player_loc):
+    new_player2_loc = findLoc(state, np.array([0,0,1,0]))
+    if (not new_player_loc) and (not new_player2_loc):
         state[player_loc[0]] = np.array([0,0,0,1])
-        state[player_loc[1]] = np.array([0,0,0,1])
+        state[player2_loc[0]] = np.array([0,0,1,0])
 
-    #re-place pit
-    for i in range(len(pit)):
-        if (pit[i] != player_loc[0]) and (pit[i] != player_loc[1]):
-            state[pit[i]][1] = 1
+    #re-place goal_2
+    for i in range(len(goal_2)):
+        if (goal_2[i] != player_loc[0]) and (goal_2[i] != player2_loc[0]):
+            state[goal_2[i]][1] = 1
     #re-place wall
-    for i in range(len(wall)):
-        if (wall[i] != player_loc[0]) and (wall[i] != player_loc[1]):
-            state[wall[i]][2] = 1
+    # for i in range(len(wall)):
+    #     if (wall[i] != player_loc[0]) and (wall[i] != wall[1]):
+    #         state[wall[i]][2] = 1
     #re-place goal
     for i in range(len(goal)):
-        if goal[i] != player_loc[0] and (goal[i] != player_loc[1]):
+        if goal[i] != player_loc[0] and (goal[i] != player2_loc[0]):
                 state[goal[i]][0] = 1
 
     return state
@@ -160,55 +165,59 @@ def getLoc(state, level): #오브젝트와 겹치는지 확인
 
 def getReward(state, reward_memory, action):
     player_loc = getLoc(state, 3)
-    pit = getLoc(state, 1)
+    goal_2 = getLoc(state, 1)
     goal = getLoc(state, 0)
-    wall = getLoc(state, 2)
+    player2_loc = getLoc(state, 2)
     marginal_rate = 0.9
     n_goal = reward_memory.count('goal')
-    n_pit = reward_memory.count('pit')
-    n_wall = reward_memory.count('wall')
-    for i in range(len(wall)):
+    n_goal_2 = reward_memory.count('goal_2')
+    # n_wall = reward_memory.count('wall')
+    # for i in range(len(wall)):
+    #     for j in range(len(player_loc)):
+    #         if (player_loc[j] == wall[i]):
+    #             reward = 10.0*(marginal_rate**n_wall)
+    #             return reward, "wall"
+    for i in range(len(goal_2)):
         for j in range(len(player_loc)):
-            if (player_loc[j] == wall[i]):
-                reward = 10.0*(marginal_rate**n_wall)
-                return reward, "wall"
-    for i in range(len(pit)):
-        for j in range(len(player_loc)):
-            if (player_loc[j] == pit[i]):
-                reward = 10.0*(marginal_rate**n_pit)
-                return reward, "pit"
+            if (player_loc[j] == goal_2[i]) or (player2_loc[j] == goal_2[i]):
+                reward = 10.0*(marginal_rate**n_goal_2)
+                return reward, "goal_2"
     for i in range(len(goal)):
         for j in range(len(player_loc)):
-            if (player_loc[j] == goal[i]):
+            if (player_loc[j] == goal[i]) or (player2_loc[j] == goal[i]):
                 reward = 10.0*(marginal_rate**n_goal)
                 return reward, "goal"
-    if action == 4:
-        return 0, "stay"
     else:
-        return -1, "move"
+        return 0, "move"
 
     
 def dispGrid(state):
     grid = np.zeros((4,4), dtype= str)
     player_loc = findLoc(state, np.array([0,0,0,1]))
-    wall = findLoc(state, np.array([0,0,1,0]))
+    player2_loc = findLoc(state, np.array([0,0,1,0]))
     goal = findLoc(state, np.array([1,0,0,0]))
-    pit = findLoc(state, np.array([0,1,0,0]))
+    goal_2 = findLoc(state, np.array([0,1,0,0]))
     for i in range(0,4):
         for j in range(0,4):
             grid[i,j] = ' '
     
-    if wall:
-        for i in range(len(wall)):
-            grid[tuple(wall[i])] = 'W' #wall
+
     if goal:
         for i in range(len(goal)):
             grid[tuple(goal[i])] = '+' #goal
-    if pit:
-        for i in range(len(pit)):
-            grid[tuple(pit[i])] = '-' #pit
+    if goal_2:
+        for i in range(len(goal_2)):
+            grid[tuple(goal_2[i])] = '-' #goal_2
+    if player2_loc:
+        for i in range(len(player2_loc)):
+            grid[tuple(player2_loc[i])] = '2' #player2
     if player_loc:
         for i in range(len(player_loc)):
-            grid[tuple(player_loc[i])] = f'{i+1}' #player
+            grid[tuple(player_loc[i])] = '1' #player
 
     return grid
+
+def check_overlap(lst):
+    if len(lst) < 5:
+        return False
+    return all(lst[-1] == x for x in lst[-5:-1])

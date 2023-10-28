@@ -7,7 +7,7 @@ import torch
 ## Include the replay experience
 
 epochs = 100
-gamma = 0.1 #since it may take several moves to goal, making gamma high
+gamma = 0.5 #since it may take several moves to goal, making gamma high
 epsilon = 1
 
 model = Q_learning(64, [150,150], 4, hidden_unit)
@@ -22,7 +22,6 @@ model_2 = Q_learning(64, [150,150], 4, hidden_unit)
 optimizer_2 = optim.RMSprop(model_2.parameters(), lr = 1e-2)
 # optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
 criterion_2 = torch.nn.MSELoss()
-buffer = 80
 BATCH_SIZE = 40
 memory_2 = ReplayMemory(buffer)
 
@@ -32,6 +31,7 @@ for i in range(epochs):
     step = 0
     reward_memory = []
     reward_sum = 0
+    action_memory = []
 
     state_2 = initGrid()
     status_2 = 1
@@ -39,6 +39,8 @@ for i in range(epochs):
     reward_memory_2 = []
     move_memory_2 = []
     reward_sum_2 = 0
+    action_memory_2 = []
+    
     #while game still in progress
     while(status == 1):   
         v_state = Variable(torch.from_numpy(state)).view(1,-1)
@@ -52,6 +54,11 @@ for i in range(epochs):
             action_2 = np.argmax(qval.data)
         #Take action, observe new state S'
         
+        action_memory.append(action)
+        if check_overlap(action_memory):
+            choices = [i for i in range(4) if i != action]
+            action = np.random.choice(choices)
+
         player = True
         new_state = makeMove(state, action, player)
         v_new_state = Variable(torch.from_numpy(new_state)).view(1,-1)
@@ -95,6 +102,11 @@ for i in range(epochs):
         for p in model.parameters():
             p.grad.data.clamp_(-1, 1)
         optimizer.step()
+
+        action_memory.append(action_2)
+        if check_overlap(action_memory_2):
+            choices = [i for i in range(4) if i != action_2]
+            action_2 = np.random.choice(choices)
 
         player = False
         new_state = makeMove(new_state, action_2, player)
@@ -156,6 +168,8 @@ def testAlgo(init=1):
     reward_memory = []
     reward_sum_2 = 0
     reward_memory_2 = []
+    action_memory = []
+    action_memory_2 = []
 
     if init==0:
         state = initGrid()
@@ -174,6 +188,12 @@ def testAlgo(init=1):
         # print("P1 qval: ", qval)
         action = np.argmax(qval.data) #take action with highest Q-value
         print('P1 Move #: %s; Taking action: %s' % (i, action))
+
+        action_memory.append(action)   
+        if check_overlap(action_memory):
+            choices = [i for i in range(4) if i != action]
+            action = np.random.choice(choices)
+
         player = True
         state = makeMove(state, action, player)
         print(dispGrid(state))
@@ -190,6 +210,12 @@ def testAlgo(init=1):
         # print("P2 qval: ", qval_2)
         action_2 = np.argmax(qval_2.data) #take action with highest Q-value
         print('P2 Move #: %s; Taking action: %s' % (i, action_2))
+
+        action_memory_2.append(action_2)
+        if check_overlap(action_memory_2):
+            choices = [i for i in range(4) if i != action_2]
+            action_2 = np.random.choice(choices)
+
         player = False
         state = makeMove(state, action_2, player)
         print(dispGrid(state))
@@ -202,8 +228,10 @@ def testAlgo(init=1):
         #     print("Reward: %s" % (reward,))
 
         i += 1 #If we're taking more than 10 actions, just stop, we probably can't win this game
-        if (i > 10):
-            print("Game lost; too many moves.")
+        # if (i > 20):
+        #     print("Game lost; too many moves.")
+        #     break
+        if findLoc(state, np.array([0,1,0,0])) == [] and findLoc(state, np.array([1,0,0,0])) == []:
             break
     print("Reward: %s" % (reward,))
 
