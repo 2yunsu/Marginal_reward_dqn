@@ -163,12 +163,11 @@ def getLoc(state, level): #오브젝트와 겹치는지 확인
                 locations.append((i,j))
     return locations
 
-def getReward(state, reward_memory, action):
+def getReward(state, reward_memory, marginal_rate):
     player_loc = getLoc(state, 3)
     goal_2 = getLoc(state, 1)
     goal = getLoc(state, 0)
     player2_loc = getLoc(state, 2)
-    marginal_rate = 0.9
     n_goal = reward_memory.count('goal')
     n_goal_2 = reward_memory.count('goal_2')
     # n_wall = reward_memory.count('wall')
@@ -190,7 +189,6 @@ def getReward(state, reward_memory, action):
     else:
         return 0, "move"
 
-    
 def dispGrid(state):
     grid = np.zeros((4,4), dtype= str)
     player_loc = findLoc(state, np.array([0,0,0,1]))
