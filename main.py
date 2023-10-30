@@ -18,7 +18,8 @@ random.seed(random_seed)  # random
 buffer = 80
 BATCH_SIZE = 40
 rendering = False
-epochs = 100
+epochs = 1000
+end_step = 100
 
 #model
 model = Q_learning(64, [150,150], 4, hidden_unit)
@@ -36,17 +37,15 @@ memory_2 = ReplayMemory(buffer)
 def trainAlgo(init, marginal_rate_train):
     epsilon = 1
     gamma = 0 #since it may take several moves to goal, making gamma high
-    pdb.set_trace()
-
-    if init==0:
-        state = initGrid()
-    elif init==1:
-        state = initGridPlayer()
-    elif init==2:
-        state = initGridRand()
 
     for i in range(epochs):
-        state = initGrid()
+        if init==0:
+            state = initGrid()
+        elif init==1:
+            state = initGridPlayer()
+        elif init==2:
+            state = initGridRand()
+        
         status = 1
         step = 0
 
@@ -158,6 +157,7 @@ def trainAlgo(init, marginal_rate_train):
             y_2 = y_2.view(-1,1)
             print("Game #: %s" % (i,), end='\r')
             loss_2 = criterion_2(state_action_values_2, y_2)
+            
             # Optimize the model
             optimizer_2.zero_grad()
             loss_2.backward()
@@ -165,9 +165,10 @@ def trainAlgo(init, marginal_rate_train):
                 p.grad.data.clamp_(-1, 1)
             optimizer_2.step()
             state = new_state
+
             if reward_2 != -1:
                 status = 0
-            if step >20:
+            if step > end_step:
                 break
         if epsilon > 0.1:
             epsilon -= (1/epochs)
@@ -175,7 +176,6 @@ def trainAlgo(init, marginal_rate_train):
 ## Here is the test of AI
 def testAlgo(init):
     i = 0
-    end_count = 100
     status = 1
     reward_sum = 0
     reward_memory = []
@@ -251,7 +251,7 @@ def testAlgo(init):
                 print("P2 R pair: ", P2_pair)
             return reward_sum, reward_sum_2, P1_pair, P2_pair
     
-        if (i > end_count):
+        if (i > end_step):
             # print("Game lost; too many moves.")
             return None, None, None, None
 
@@ -263,8 +263,8 @@ if __name__ == "__main__":
     iterate_number = 10
     marginal_rate_train = 1
     marginal_rate_test = 0.8
-    print("train epochs", epochs)
-    print("iterate numner", iterate_number)
+    print("train epochs: ", epochs)
+    print("iterate numner: ", iterate_number)
 
     for i in range(iterate_number):
         #Train

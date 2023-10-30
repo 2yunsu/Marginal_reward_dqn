@@ -41,7 +41,6 @@ def initGrid():
     #place goal_2
     state[0,1] = np.array([0,1,0,0])
     state[0,2] = np.array([0,1,0,0])
-    state[0,3] = np.array([0,1,0,0])
     state[1,0] = np.array([0,1,0,0])
     state[1,1] = np.array([0,1,0,0])
     state[1,2] = np.array([0,1,0,0])
@@ -51,7 +50,6 @@ def initGrid():
     state[2,1] = np.array([1,0,0,0])
     state[2,2] = np.array([1,0,0,0])
     state[2,3] = np.array([1,0,0,0])
-    state[3,0] = np.array([1,0,0,0])
     state[3,1] = np.array([1,0,0,0])
     state[3,2] = np.array([1,0,0,0])
     return state
@@ -144,11 +142,7 @@ def makeMove(state, action, player):
     for i in range(len(goal_2)):
         if (goal_2[i] != player_loc[0]) and (goal_2[i] != player2_loc[0]):
             state[goal_2[i]][1] = 1
-    #re-place wall
-    # for i in range(len(wall)):
-    #     if (wall[i] != player_loc[0]) and (wall[i] != wall[1]):
-    #         state[wall[i]][2] = 1
-    #re-place goal
+
     for i in range(len(goal)):
         if goal[i] != player_loc[0] and (goal[i] != player2_loc[0]):
                 state[goal[i]][0] = 1
@@ -170,12 +164,7 @@ def getReward(state, reward_memory, marginal_rate):
     player2_loc = getLoc(state, 2)
     n_goal = reward_memory.count('goal')
     n_goal_2 = reward_memory.count('goal_2')
-    # n_wall = reward_memory.count('wall')
-    # for i in range(len(wall)):
-    #     for j in range(len(player_loc)):
-    #         if (player_loc[j] == wall[i]):
-    #             reward = 10.0*(marginal_rate**n_wall)
-    #             return reward, "wall"
+
     for i in range(len(goal_2)):
         for j in range(len(player_loc)):
             if (player_loc[j] == goal_2[i]) or (player2_loc[j] == goal_2[i]):

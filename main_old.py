@@ -34,7 +34,7 @@ optimizer_2 = optim.RMSprop(model_2.parameters(), lr = 1e-2)
 criterion_2 = torch.nn.MSELoss()
 BATCH_SIZE = 40
 memory_2 = ReplayMemory(buffer)
-marginal_rate_train = 1
+marginal_rate_train = 0.9
 marginal_rate_test = 0.8
 
 for i in range(epochs):
