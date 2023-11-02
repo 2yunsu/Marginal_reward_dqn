@@ -20,6 +20,7 @@ BATCH_SIZE = 40
 rendering = False
 epochs = 1000
 end_step = 100
+gamma = 0.7 #since it may take several moves to goal, making gamma high
 
 #model
 model = Q_learning(64, [150,150], 4, hidden_unit)
@@ -36,7 +37,6 @@ memory_2 = ReplayMemory(buffer)
 
 def trainAlgo(init, marginal_rate_train):
     epsilon = 1
-    gamma = 0 #since it may take several moves to goal, making gamma high
 
     for i in range(epochs):
         if init==0:
@@ -82,7 +82,7 @@ def trainAlgo(init, marginal_rate_train):
             reward, reward_obj = getReward(new_state, reward_memory, marginal_rate_train)
             reward_sum += reward
             reward_memory.append(reward_obj)
-            memory.push(v_state.data, action, v_new_state.data, reward_sum)
+            memory.push(v_state.data, action, v_new_state.data, reward)
 
             if (len(memory) < buffer): #if buffer not filled, add to it
                 state = new_state
@@ -129,7 +129,7 @@ def trainAlgo(init, marginal_rate_train):
             reward_2, reward_obj_2 = getReward(new_state, reward_memory_2, marginal_rate_train)
             reward_sum_2 += reward_2
             reward_memory_2.append(reward_obj_2)
-            memory_2.push(v_state.data, action_2, v_new_state.data, reward_sum_2)
+            memory_2.push(v_state.data, action_2, v_new_state.data, reward_2)
             step +=1
 
             if (len(memory_2) < buffer): #if buffer not filled, add to it
@@ -175,7 +175,7 @@ def trainAlgo(init, marginal_rate_train):
 
 ## Here is the test of AI
 def testAlgo(init):
-    i = 0
+    step = 0
     status = 1
     reward_sum = 0
     reward_memory = []
@@ -214,7 +214,7 @@ def testAlgo(init):
 
         if rendering:
             print("P1 qval: ", qval)
-            print('P1 Move #: %s; Taking action: %s' % (i, action)) 
+            print('P1 Move #: %s; Taking action: %s' % (step, action)) 
             print(dispGrid(state))
 
         v_state = Variable(torch.from_numpy(state))
@@ -234,10 +234,10 @@ def testAlgo(init):
 
         if rendering:
             print("P2 qval: ", qval_2)
-            print('P2 Move #: %s; Taking action: %s' % (i, action_2))
+            print('P2 Move #: %s; Taking action: %s' % (step, action_2))
             print(dispGrid(state))
 
-        i += 1 #If we're taking more than end_count actions, just stop, we probably can't win this game
+        step += 1 #If we're taking more than end_count actions, just stop, we probably can't win this game
         P1_pair = (reward_memory.count('goal'), reward_memory.count('goal_2'))
         P2_pair = (reward_memory_2.count('goal'), reward_memory_2.count('goal_2'))
         # reward_number_sum = (reward_memory.count('goal')+ reward_memory.count('goal_2'))
@@ -249,24 +249,30 @@ def testAlgo(init):
                 print("P2 reward: ", reward_sum_2)
                 print("P1 R pair: ", P1_pair)
                 print("P2 R pair: ", P2_pair)
-            return reward_sum, reward_sum_2, P1_pair, P2_pair
+            return reward_sum, reward_sum_2, P1_pair, P2_pair, step
     
-        if (i > end_step):
+        if (step > end_step):
             # print("Game lost; too many moves.")
-            return None, None, None, None
+            return reward_sum, reward_sum_2, P1_pair, P2_pair, step
 
     print("Reward: %s" % (reward,))
 
 if __name__ == "__main__":
     # game mode
     init = 0
-    iterate_number = 10
+    episode = 100
     marginal_rate_train = 1
     marginal_rate_test = 0.8
+    Total_Utility_list = []
+    Std_list = []
+    episode_list = []
+    step_list = []
     print("train epochs: ", epochs)
-    print("iterate numner: ", iterate_number)
+    print("test episode: ", episode)
+    print("gamma: ", gamma)
+    print()
 
-    for i in range(iterate_number):
+    for i in range(10):
         #Train
         marginal_rate_train = round(marginal_rate_train, 1)
         trainAlgo(init, marginal_rate_train)
@@ -276,19 +282,28 @@ if __name__ == "__main__":
         P2_reward_memory = []
         P1_pair_memory = []
         P2_pair_memory = []
+        step_memory = []
+        episode_memory = 0        
 
-        for i in range(10):
+        for i in range(episode):
             #Test
-            P1_reward, P2_reward, P1_pair, P2_pair = testAlgo(init)
+            P1_reward, P2_reward, P1_pair, P2_pair, step = testAlgo(init)
             if P1_reward != None and P2_reward != None and P1_pair != None and P2_pair != None:
                 P1_reward_memory.append(P1_reward)
                 P2_reward_memory.append(P2_reward)
                 P1_pair_memory.append(P1_pair)
-                P2_pair_memory.append(P2_pair) 
+                P2_pair_memory.append(P2_pair)
+                if step <= end_step:
+                    episode_memory += 1
+                    step_memory.append(step)
 
         Total_Utility = (np.mean(P1_reward_memory)+np.mean(P2_reward_memory))
         Total_pair = [item for tpl in (P1_pair_memory + P2_pair_memory) for item in tpl]
         SD = np.std(Total_pair)
+        Total_Utility_list.append(Total_Utility)
+        Std_list.append(SD)
+        episode_list.append(episode_memory)
+        step_list.append(np.mean(step_memory))
 
         print("Marginal rate: ", marginal_rate_train)
         # print("P1 ratio: ", P1_pair_memory)
@@ -297,8 +312,17 @@ if __name__ == "__main__":
         # print("P2 reward: ", P2_reward_memory)
         # print("P1 reward mean: ", np.mean(P1_reward_memory))
         # print("P2 reward mean: ", np.mean(P2_reward_memory))
+        
         print("Total Utility: ", Total_Utility)
-        print("Std: ", SD)  
+        print("Std: ", SD)
+        print("Success Episode: ", episode_memory)
+        print("step mean: ", np.mean(step_memory))
         print()
 
         marginal_rate_train -= 0.1
+    
+    print("Total Utility mean: ", np.mean(Total_Utility_list))
+    print("Std mean: ", np.mean(Std_list)) 
+    print("Success Episode mean: ", np.mean(episode_list))
+    print("Step mean: ", np.mean(step_list))
+    print()

@@ -1,121 +1,68 @@
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
+train epochs:  1000
+test episode:  100
+gamma:  0.7
+
 Marginal rate:  1
-P1_SD:  0.816496580927726
-P2_SD:  0.816496580927726
-P1 ratio:  [7, 8, 6, 6, 6, 7]
-P2 ratio:  [7, 6, 8, 8, 8, 7]
-P1 reward:  [39.51424000000001, 49.51424000000001, 43.61600000000001, 36.89280000000001, 43.61600000000001, 53.92]
-P2 reward:  [39.51424000000001, 36.89280000000001, 54.89280000000001, 49.51424000000001, 54.89280000000001, 53.92]
-P1 reward mean:  44.512213333333335
-P2 reward mean:  48.271146666666674
-P1&P2_reward_mean:  46.39168000000001
+Total Utility:  85.539744
+Std:  2.0391113260437743
+Success Episode:  90
+step mean:  30.066666666666666
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.9
-P1_SD:  1.3693063937629153
-P2_SD:  1.3693063937629153
-P1 ratio:  [5, 5, 6, 7, 9, 7, 8, 8]
-P2 ratio:  [9, 9, 8, 7, 5, 7, 6, 6]
-P1 reward:  [39.519999999999996, 39.519999999999996, 47.519999999999996, 53.919999999999995, 63.135999999999996, 53.919999999999995, 54.8928, 58.016]
-P2 reward:  [61.29280000000001, 61.29280000000001, 58.016, 53.919999999999995, 42.4, 53.92, 43.616, 47.519999999999996]
-P1 reward mean:  51.3056
-P2 reward mean:  52.7472
-P1&P2_reward_mean:  52.026399999999995
+Total Utility:  85.530944
+Std:  2.074632497576378
+Success Episode:  93
+step mean:  29.150537634408604
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.8
-P1_SD:  1.2747548783981961
-P2_SD:  1.2747548783981961
-P1 ratio:  [7, 6, 8, 6, 7, 4, 7, 8]
-P2 ratio:  [7, 8, 6, 8, 7, 10, 7, 6]
-P1 reward:  [53.919999999999995, 47.519999999999996, 58.016, 47.519999999999996, 53.919999999999995, 36.0, 53.919999999999995, 58.016]
-P2 reward:  [53.919999999999995, 58.016, 47.519999999999996, 58.016, 53.919999999999995, 67.232, 53.919999999999995, 47.519999999999996]
-P1 reward mean:  51.104
-P2 reward mean:  55.007999999999996
-P1&P2_reward_mean:  53.056
+Total Utility:  85.02832000000001
+Std:  2.1435018077902335
+Success Episode:  92
+step mean:  35.630434782608695
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.7
-P1_SD:  1.2018504251546631
-P2_SD:  1.2018504251546631
-P1 ratio:  [7, 7, 8, 8, 8, 8, 9, 6, 9]
-P2 ratio:  [7, 7, 6, 6, 6, 6, 5, 8, 5]
-P1 reward:  [46.8928, 46.8928, 58.016, 58.016, 54.8928, 54.8928, 61.2928, 47.519999999999996, 61.2928]
-P2 reward:  [46.8928, 46.8928, 47.519999999999996, 47.519999999999996, 43.616, 43.616, 39.519999999999996, 58.016, 39.519999999999996]
-P1 reward mean:  54.41208888888889
-P2 reward mean:  45.90151111111111
-P1&P2_reward_mean:  50.156800000000004
+Total Utility:  86.11295999999999
+Std:  2.0376441666787652
+Success Episode:  91
+step mean:  35.120879120879124
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.6
-P1_SD:  1.5275252316519468
-P2_SD:  1.5275252316519468
-P1 ratio:  [7, 6, 9, 8, 5, 6, 4, 7, 6]
-P2 ratio:  [7, 8, 5, 6, 9, 8, 10, 7, 8]
-P1 reward:  [53.919999999999995, 43.616, 61.2928, 58.016, 39.519999999999996, 47.519999999999996, 34.4, 51.616, 47.519999999999996]
-P2 reward:  [53.919999999999995, 54.8928, 39.519999999999996, 47.519999999999996, 61.2928, 58.016, 66.4128, 51.616, 58.016]
-P1 reward mean:  48.602311111111106
-P2 reward mean:  54.57848888888889
-P1&P2_reward_mean:  51.5904
+Total Utility:  87.476224
+Std:  1.4846527371745892
+Success Episode:  58
+step mean:  41.93103448275862
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.5
-P1_SD:  1.9148542155126762
-P2_SD:  1.9148542155126762
-P1 ratio:  [6, 5, 7, 4, 9, 5]
-P2 ratio:  [8, 9, 7, 10, 5, 9]
-P1 reward:  [48.8, 42.4, 53.919999999999995, 34.4, 63.135999999999996, 42.4]
-P2 reward:  [59.040000000000006, 63.13600000000001, 53.92, 66.4128, 42.400000000000006, 63.13600000000001]
-P1 reward mean:  47.50933333333333
-P2 reward mean:  58.00746666666668
-P1&P2_reward_mean:  52.75840000000001
+Total Utility:  88.712288
+Std:  1.5436644713149292
+Success Episode:  62
+step mean:  39.5
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.4
-P1_SD:  2.516611478423583
-P2_SD:  2.516611478423583
-P1 ratio:  [10, 10, 8]
-P2 ratio:  [4, 4, 6]
-P1 reward:  [66.4128, 66.4128, 58.016000000000005]
-P2 reward:  [34.4, 34.4, 47.519999999999996]
-P1 reward mean:  63.613866666666674
-P2 reward mean:  38.77333333333333
-P1&P2_reward_mean:  51.1936
+Total Utility:  93.168992
+Std:  1.1912598373151007
+Success Episode:  90
+step mean:  42.34444444444444
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.3
-P1_SD:  1.4142135623730951
-P2_SD:  1.4142135623730951
-P1 ratio:  [6, 9, 5, 6, 6, 6]
-P2 ratio:  [8, 5, 9, 8, 8, 8]
-P1 reward:  [48.8, 63.135999999999996, 42.4, 48.8, 48.8, 47.519999999999996]
-P2 reward:  [59.040000000000006, 42.400000000000006, 63.13600000000001, 59.040000000000006, 59.040000000000006, 58.016000000000005]
-P1 reward mean:  49.90933333333333
-P2 reward mean:  56.77866666666668
-P1&P2_reward_mean:  53.34400000000001
+Total Utility:  88.72966400000001
+Std:  1.589331620524804
+Success Episode:  76
+step mean:  45.64473684210526
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.2
-P1_SD:  2.6457513110645907
-P2_SD:  2.6457513110645907
-P1 ratio:  [11, 4, 10, 5, 7, 6, 11, 8]
-P2 ratio:  [3, 10, 4, 9, 7, 8, 3, 6]
-P1 reward:  [70.50880000000001, 34.400000000000006, 67.23200000000001, 39.52000000000001, 51.61600000000001, 48.800000000000004, 70.50880000000001, 58.016000000000005]
-P2 reward:  [28.0, 66.4128, 36.0, 61.29280000000001, 51.616, 59.03999999999999, 28.0, 47.519999999999996]
-P1 reward mean:  55.07520000000001
-P2 reward mean:  47.2352
-P1&P2_reward_mean:  51.15520000000001
+Total Utility:  90.078944
+Std:  1.5491106319433743
+Success Episode:  87
+step mean:  43.28735632183908
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# python main.py
 Marginal rate:  0.1
-P1_SD:  1.2535663410560174
-P2_SD:  1.2535663410560174
-P1 ratio:  [8, 9, 9, 8, 8, 7, 7]
-P2 ratio:  [6, 5, 5, 6, 6, 7, 7]
-P1 reward:  [59.040000000000006, 63.13600000000001, 61.29280000000001, 58.016000000000005, 59.040000000000006, 51.61600000000001, 53.92]
-P2 reward:  [48.8, 42.4, 39.519999999999996, 47.519999999999996, 48.8, 51.616, 53.92]
-P1 reward mean:  58.00868571428572
-P2 reward mean:  47.51085714285714
-P1&P2_reward_mean:  52.759771428571426
+Total Utility:  87.81696000000001
+Std:  1.527823206395295
+Success Episode:  60
+step mean:  44.7
 
-(dqn_grid) root@689aba6df767:~/Reinforcement-Learning-Q-learning-Gridworld-Pytorch# 
+Total Utility mean:  87.81950400000001
+Std mean:  1.7180732302757242
+Success Episode mean:  79.9
+Step mean:  38.73760902957104
