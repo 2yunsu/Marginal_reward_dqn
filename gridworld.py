@@ -34,10 +34,8 @@ def initGrid():
     state = np.zeros((4,4,4))
     #place player
     state[0,0] = np.array([0,0,0,1])
-    
     #place player2
     state[3,3] = np.array([0,0,1,0])
-    # state[0,1] = np.array([0,0,1,0])
     #place goal_2
     state[0,1] = np.array([0,1,0,0])
     state[0,2] = np.array([0,1,0,0])

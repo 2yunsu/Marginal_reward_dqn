@@ -1,68 +1,68 @@
 train epochs:  1000
 test episode:  100
-gamma:  0.7
+gamma:  0.9
 
 Marginal rate:  1
-Total Utility:  85.539744
-Std:  2.0391113260437743
+Total Utility:  86.7144177777778
+Std:  2.035790864613663
 Success Episode:  90
 step mean:  30.066666666666666
 
 Marginal rate:  0.9
-Total Utility:  85.530944
-Std:  2.074632497576378
+Total Utility:  86.2712430107527
+Std:  2.076494150482791
 Success Episode:  93
 step mean:  29.150537634408604
 
 Marginal rate:  0.8
-Total Utility:  85.02832000000001
-Std:  2.1435018077902335
+Total Utility:  85.47387826086957
+Std:  2.14805270763606
 Success Episode:  92
 step mean:  35.630434782608695
 
 Marginal rate:  0.7
-Total Utility:  86.11295999999999
-Std:  2.0376441666787652
+Total Utility:  86.5850021978022
+Std:  2.0475125621855637
 Success Episode:  91
 step mean:  35.120879120879124
 
 Marginal rate:  0.6
-Total Utility:  87.476224
-Std:  1.4846527371745892
+Total Utility:  91.94355862068966
+Std:  1.476832584539839
 Success Episode:  58
 step mean:  41.93103448275862
 
 Marginal rate:  0.5
-Total Utility:  88.712288
-Std:  1.5436644713149292
+Total Utility:  91.17367741935486
+Std:  1.5709048142659283
 Success Episode:  62
 step mean:  39.5
 
 Marginal rate:  0.4
-Total Utility:  93.168992
-Std:  1.1912598373151007
+Total Utility:  93.95808
+Std:  1.1832159566199232
 Success Episode:  90
 step mean:  42.34444444444444
 
 Marginal rate:  0.3
-Total Utility:  88.72966400000001
-Std:  1.589331620524804
+Total Utility:  90.77057662337663
+Std:  1.6196841122196093
 Success Episode:  76
 step mean:  45.64473684210526
 
 Marginal rate:  0.2
-Total Utility:  90.078944
-Std:  1.5491106319433743
+Total Utility:  91.15698181818182
+Std:  1.5703213336477
 Success Episode:  87
 step mean:  43.28735632183908
 
 Marginal rate:  0.1
-Total Utility:  87.81696000000001
-Std:  1.527823206395295
+Total Utility:  91.00538666666668
+Std:  1.591644851508443
 Success Episode:  60
 step mean:  44.7
 
-Total Utility mean:  87.81950400000001
-Std mean:  1.7180732302757242
+Total Utility mean:  89.5052802395472
+Std mean:  1.732045393771952
 Success Episode mean:  79.9
 Step mean:  38.73760902957104

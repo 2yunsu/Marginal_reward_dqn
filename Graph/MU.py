@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 #Marginal Utility Graph
 # n_goal_2의 범위를 정의합니다.
-n_goal_2_values = range(1, 15)
+n_goal_2_values = range(1, 7)
 
 # 각 n_goal_2 값에 대한 reward 값을 계산합니다.
 rewards = [10.0*(0.8**(n-1)) for n in n_goal_2_values]

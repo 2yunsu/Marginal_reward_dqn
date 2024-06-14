@@ -20,7 +20,7 @@ BATCH_SIZE = 40
 rendering = False
 epochs = 1000
 end_step = 100
-gamma = 0.7 #since it may take several moves to goal, making gamma high
+gamma = 0.9 #since it may take several moves to goal, making gamma high
 
 #model
 model = Q_learning(64, [150,150], 4, hidden_unit)
@@ -49,12 +49,10 @@ def trainAlgo(init, marginal_rate_train):
         status = 1
         step = 0
 
-        reward_memory = []
-        reward_sum = 0
-        action_memory = []
+        reward_memory_1 = [] #goal에 도달했을 때 reward의 한계효용을 주기 위함
+        action_memory_1 = []
 
         reward_memory_2 = []
-        reward_sum_2 = 0
         action_memory_2 = []
         
         #while game still in progress
@@ -70,18 +68,17 @@ def trainAlgo(init, marginal_rate_train):
                 action_2 = np.argmax(qval_2.data)
             #Take action, observe new state S'
             
-            action_memory.append(action)
+            action_memory_1.append(action)
 
-            if check_overlap(action_memory): #같은 action을 4번 이상할 경우 다른 action을 선택하도록 함
+            if check_overlap(action_memory_1): #같은 action을 4번 이상할 경우 다른 action을 선택하도록 함
                 choices = [i for i in range(4) if i != action]
                 action = np.random.choice(choices)
 
             player = True
             new_state = makeMove(state, action, player)
             v_new_state = Variable(torch.from_numpy(new_state)).view(1,-1)
-            reward, reward_obj = getReward(new_state, reward_memory, marginal_rate_train)
-            reward_sum += reward
-            reward_memory.append(reward_obj)
+            reward, reward_obj = getReward(new_state, reward_memory_1, marginal_rate_train)
+            reward_memory_1.append(reward_obj)
             memory.push(v_state.data, action, v_new_state.data, reward)
 
             if (len(memory) < buffer): #if buffer not filled, add to it
@@ -127,7 +124,6 @@ def trainAlgo(init, marginal_rate_train):
             v_new_state = Variable(torch.from_numpy(new_state)).view(1,-1)
             #Observe reward
             reward_2, reward_obj_2 = getReward(new_state, reward_memory_2, marginal_rate_train)
-            reward_sum_2 += reward_2
             reward_memory_2.append(reward_obj_2)
             memory_2.push(v_state.data, action_2, v_new_state.data, reward_2)
             step +=1
@@ -177,7 +173,7 @@ def trainAlgo(init, marginal_rate_train):
 def testAlgo(init):
     step = 0
     status = 1
-    reward_sum = 0
+    reward_sum_1 = 0
     reward_memory = []
     reward_sum_2 = 0
     reward_memory_2 = []
@@ -209,7 +205,8 @@ def testAlgo(init):
         player = True
         state = makeMove(state, action, player)
         reward, reward_obj = getReward(state, reward_memory, marginal_rate_test)
-        reward_sum += reward
+        if reward != -1: #reward와 효용을 따로 계산하기 위함
+            reward_sum_1 += reward
         reward_memory.append(reward_obj)
 
         if rendering:
@@ -229,7 +226,8 @@ def testAlgo(init):
         player = False
         state = makeMove(state, action_2, player)
         reward_2, reward_obj_2 = getReward(state, reward_memory_2, marginal_rate_test)
-        reward_sum_2 += reward_2
+        if reward != -1:
+            reward_sum_2 += reward_2
         reward_memory_2.append(reward_obj_2)
 
         if rendering:
@@ -249,11 +247,12 @@ def testAlgo(init):
                 print("P2 reward: ", reward_sum_2)
                 print("P1 R pair: ", P1_pair)
                 print("P2 R pair: ", P2_pair)
-            return reward_sum, reward_sum_2, P1_pair, P2_pair, step
+            return reward_sum_1, reward_sum_2, P1_pair, P2_pair, step
     
         if (step > end_step):
             # print("Game lost; too many moves.")
-            return reward_sum, reward_sum_2, P1_pair, P2_pair, step
+            return None, None, None, None, step
+            return reward_sum_1, reward_sum_2, P1_pair, P2_pair, step
 
     print("Reward: %s" % (reward,))
 
