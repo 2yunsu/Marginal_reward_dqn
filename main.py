@@ -5,6 +5,8 @@ import torch.optim as optim
 import torch
 import numpy as np
 import random
+import matplotlib.pyplot as plt
+
 
 #random seed
 random_seed = 0
@@ -243,7 +245,7 @@ def testAlgo(init):
         
         if findLoc(state, np.array([0,1,0,0])) == [] and findLoc(state, np.array([1,0,0,0])) == []:
             if rendering:
-                print("P1 reward: ", reward_sum)
+                print("P1 reward: ", reward_sum_1)
                 print("P2 reward: ", reward_sum_2)
                 print("P1 R pair: ", P1_pair)
                 print("P2 R pair: ", P2_pair)
@@ -319,6 +321,8 @@ if __name__ == "__main__":
         print()
 
         marginal_rate_train -= 0.1
+        plt.plot(P1_reward_memory, label='P1')
+        plt.plot(P2_reward_memory, label='P2')
     
     print("Total Utility mean: ", np.mean(Total_Utility_list))
     print("Std mean: ", np.mean(Std_list)) 
