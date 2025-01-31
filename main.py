@@ -20,6 +20,7 @@ random.seed(random_seed)  # random
 buffer = 80
 BATCH_SIZE = 40
 rendering = False
+count_fail_episode = False
 epochs = 1000
 end_step = 100
 gamma = 0.9 #since it may take several moves to goal, making gamma high
@@ -252,9 +253,10 @@ def testAlgo(init):
             return reward_sum_1, reward_sum_2, P1_pair, P2_pair, step
     
         if (step > end_step):
-            # print("Game lost; too many moves.")
-            return None, None, None, None, step
-            return reward_sum_1, reward_sum_2, P1_pair, P2_pair, step
+            if count_fail_episode: #if you want to count the rewards of failed episodes
+                return reward_sum_1, reward_sum_2, P1_pair, P2_pair, step
+            else: #if you don't want to count the rewards of failed episodes
+                return None, None, None, None, step
 
     print("Reward: %s" % (reward,))
 
@@ -311,9 +313,10 @@ if __name__ == "__main__":
         # print("P2 ratio: ", P2_pair_memory)
         # print("P1 reward: ", P1_reward_memory) 
         # print("P2 reward: ", P2_reward_memory)
-        # print("P1 reward mean: ", np.mean(P1_reward_memory))
-        # print("P2 reward mean: ", np.mean(P2_reward_memory))
-        
+        print("P1 reward mean: ", np.mean(P1_reward_memory))
+        print("P2 reward mean: ", np.mean(P2_reward_memory))
+        print("P1 pair mean: ", np.mean(np.array(P1_pair_memory)[:, 0]), ",", np.mean(np.array(P1_pair_memory)[:, 1]))
+        print("P2 pair mean: ", np.mean(np.array(P2_pair_memory)[:, 0]), ",", np.mean(np.array(P2_pair_memory)[:, 1]))
         print("Total Utility: ", Total_Utility)
         print("Std: ", SD)
         print("Success Episode: ", episode_memory)
@@ -321,8 +324,6 @@ if __name__ == "__main__":
         print()
 
         marginal_rate_train -= 0.1
-        plt.plot(P1_reward_memory, label='P1')
-        plt.plot(P2_reward_memory, label='P2')
     
     print("Total Utility mean: ", np.mean(Total_Utility_list))
     print("Std mean: ", np.mean(Std_list)) 
