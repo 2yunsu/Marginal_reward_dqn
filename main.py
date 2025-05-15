@@ -30,21 +30,6 @@ epochs = 1000
 end_step = 100
 gamma = 0.9 #since it may take several moves to goal, making gamma high
 
-#model
-model = Q_learning(64, [150,150], 4, hidden_unit)
-# model = PPOLearner
-optimizer = optim.RMSprop(model.parameters(), lr = 1e-2)
-# optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
-criterion = torch.nn.MSELoss()
-memory = ReplayMemory(buffer)
-
-model_2 = Q_learning(64, [150,150], 4, hidden_unit)
-# model_2 = PPOLearner(64, [150,150], 4, hidden_unit)
-optimizer_2 = optim.RMSprop(model_2.parameters(), lr = 1e-2)
-# optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
-criterion_2 = torch.nn.MSELoss()
-memory_2 = ReplayMemory(buffer)
-
 def trainAlgo(init, marginal_rate_train):
     epsilon = 1
 
@@ -281,8 +266,24 @@ if __name__ == "__main__":
     print("test episode: ", episode)
     print("gamma: ", gamma)
     print()
+    wandb.init(project="gridworld", name="test ={}".format(marginal_rate_train))
 
     for i in range(10):
+        #model
+        model = Q_learning(64, [150,150], 4, hidden_unit)
+        # model = PPOLearner
+        optimizer = optim.RMSprop(model.parameters(), lr = 1e-2)
+        # optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
+        criterion = torch.nn.MSELoss()
+        memory = ReplayMemory(buffer)
+
+        model_2 = Q_learning(64, [150,150], 4, hidden_unit)
+        # model_2 = PPOLearner(64, [150,150], 4, hidden_unit)
+        optimizer_2 = optim.RMSprop(model_2.parameters(), lr = 1e-2)
+        # optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
+        criterion_2 = torch.nn.MSELoss()
+        memory_2 = ReplayMemory(buffer)
+
         #Train
         marginal_rate_train = round(marginal_rate_train, 1)
         trainAlgo(init, marginal_rate_train)
@@ -330,6 +331,17 @@ if __name__ == "__main__":
         print("Success Episode: ", episode_memory)
         print("step mean: ", np.mean(step_memory))
         print()
+
+        wandb.log({
+            "P1_reward": np.mean(P1_reward_memory),
+            "P2_reward": np.mean(P2_reward_memory), 
+            "P1_pair": np.mean(np.array(P1_pair_memory)[:, 0]), 
+            "P2_pair": np.mean(np.array(P2_pair_memory)[:, 0]),
+            "Total_Utility": Total_Utility,
+            "Std": SD,
+            "Success Episode": episode_memory,
+            "step mean": np.mean(step_memory)
+        }, step=i)
 
         # marginal_rate_train -= 0.1
         marginal_rate_train += 0.1
