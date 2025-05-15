@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 out = 0
-draw_general_curve = False
+draw_general_curve = True
 
 #The main function 
 def draw_Ed_Bow(U1,U2, Xmax, Ymax, Xmin=10**(-6), Ymin=10**(-6), Utility_Show = False, Num_ind = 10,Xlab ="X",Ylab="Y",e=200, Contract_draw=True,AlPoint = None,colors =["black","Orange", "blue","red"],Utility_draw = True,marginal_rate = None, al_color="black"):
@@ -116,22 +116,28 @@ U1 = lambda c, n: 10 * (1 - (0.8)**c) / (1 - 0.8) + 10* (1 - (0.8)**n) / (1 - 0.
 # U2 = lambda c,n : 10*c**0.8 * n**0.8
 U2 = lambda c, n: 10 * (1 - (0.8)**c) / (1 - 0.8) + 10* (1 - (0.8)**n) / (1 - 0.8)
 
-if draw_general_curve: # #draw the general indifference curve
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"],Utility_Show = True, Num_ind=5)
-    draw_Ed_Bow(U1,U2,6,6,Xlab=r"$X_1$",Ylab=r"$X_2$",AlPoint=(3,3),Contract_draw=True,Utility_Show = True)
-    plt.savefig("./indiffernce_curve.png")
+if draw_general_curve: # #draw the single indifference curve
+    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"],Utility_Show = True, Num_ind=5, Contract_draw=False,AlPoint = None)
+    # draw_Ed_Bow(U1,U2,6,6,Xlab=r"$X_1$",Ylab=r"$X_2$",AlPoint=(3,3),Contract_draw=True,Utility_Show = True)
+    plt.savefig("./indiffernce_curve_single.png")
 
-else: #draw the experiment result indifference curve
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "tab:cyan","lightcoral"], AlPoint=(1.8444444444444446,5.311111111111111),Utility_Show = True, Utility_draw = True, marginal_rate=1,al_color = "red")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.6989247311827957,5.311827956989247),Utility_Show = True, Utility_draw = False, marginal_rate=0.9,al_color = "orange")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.826086956521739,5.532608695652174),Utility_Show = True, Utility_draw = False, marginal_rate=0.8,al_color = "gold")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.098901098901099,5.428571428571429),Utility_Show = True, Utility_draw = False, marginal_rate=0.7,al_color = "lawngreen")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.8275862068965518,3.7758620689655173),Utility_Show = True, Utility_draw = False, marginal_rate=0.6,al_color = "green")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.2096774193548385,4.532258064516129),Utility_Show = True, Utility_draw = False, marginal_rate=0.5,al_color = "deepskyblue")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "blue","red"], AlPoint=(2.7222222222222223,3.988888888888889),Utility_Show = True, Utility_draw = True, marginal_rate=0.4,al_color = "cornflowerblue")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.9870129870129871,4.534090909090909),Utility_Show = True, Utility_draw = False, marginal_rate=0.3,al_color = "navy")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.3295454545454546,5.311111111111111),Utility_Show = True, Utility_draw = False, marginal_rate=0.2,al_color = "slateblue")
-    draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"],  Xlab=r"$X^1$",Ylab=r"$X^2$", AlPoint=(2.1666666666666665,4.433333333333334),Utility_Show = True, Utility_draw = False, marginal_rate=0.1,al_color = "violet")
 
-    plt.legend(title="Marginal rate", loc="upper right")
-    plt.savefig("./indiffernce_curve_experiment.png")
+# if draw_general_curve: # #draw the general indifference curve
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"],Utility_Show = True, Num_ind=5)
+#     draw_Ed_Bow(U1,U2,6,6,Xlab=r"$X_1$",Ylab=r"$X_2$",AlPoint=(3,3),Contract_draw=True,Utility_Show = True)
+#     plt.savefig("./indiffernce_curve.png")
+
+# else: #draw the experiment result indifference curve
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "tab:cyan","lightcoral"], AlPoint=(1.8444444444444446,5.311111111111111),Utility_Show = True, Utility_draw = True, marginal_rate=1,al_color = "red")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.6989247311827957,5.311827956989247),Utility_Show = True, Utility_draw = False, marginal_rate=0.9,al_color = "orange")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.826086956521739,5.532608695652174),Utility_Show = True, Utility_draw = False, marginal_rate=0.8,al_color = "gold")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.098901098901099,5.428571428571429),Utility_Show = True, Utility_draw = False, marginal_rate=0.7,al_color = "lawngreen")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.8275862068965518,3.7758620689655173),Utility_Show = True, Utility_draw = False, marginal_rate=0.6,al_color = "green")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.2096774193548385,4.532258064516129),Utility_Show = True, Utility_draw = False, marginal_rate=0.5,al_color = "deepskyblue")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "blue","red"], AlPoint=(2.7222222222222223,3.988888888888889),Utility_Show = True, Utility_draw = True, marginal_rate=0.4,al_color = "cornflowerblue")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(1.9870129870129871,4.534090909090909),Utility_Show = True, Utility_draw = False, marginal_rate=0.3,al_color = "navy")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"], AlPoint=(2.3295454545454546,5.311111111111111),Utility_Show = True, Utility_draw = False, marginal_rate=0.2,al_color = "slateblue")
+#     draw_Ed_Bow(U1,U2,6,6,colors=["k","Orange", "lightblue","mistyrose"],  Xlab=r"$X_1$",Ylab=r"$X_2$", AlPoint=(2.1666666666666665,4.433333333333334),Utility_Show = True, Utility_draw = False, marginal_rate=0.1,al_color = "violet")
+
+#     plt.legend(title="Marginal rate", loc="upper right")
+#     plt.savefig("./indiffernce_curve_experiment.png")

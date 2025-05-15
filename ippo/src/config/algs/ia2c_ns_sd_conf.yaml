@@ -1,0 +1,39 @@
+# --- IA2C NS specific parameters ---
+
+action_selector: "soft_policies"
+mask_before_softmax: True
+
+runner: "parallel_sd_conf"
+
+buffer_size: 10
+batch_size_run: 10
+batch_size: 10
+
+env_args:
+  state_last_action: False # critic adds last action internally
+
+# update the target network every {} training steps
+target_update_interval_or_tau: 0.01
+
+lr: 0.001
+
+obs_agent_id: False
+obs_last_action: False
+obs_individual_obs: False
+
+obs_msg: True
+msg_len: 10
+use_state_diff: True
+
+mac: "non_shared_sd_conf_mac"
+agent: "rnn_ns"
+agent_output_type: "pi_logits"
+learner: "actor_critic_sd_conf_learner"
+entropy_coef: 0.01
+standardise_rewards: True
+use_rnn: True
+q_nstep: 5 # 1 corresponds to normal r + gammaV
+critic_type: "ac_critic_ns_msg"
+name: "ia2c_ns_sd_conf"
+
+t_max: 20050000

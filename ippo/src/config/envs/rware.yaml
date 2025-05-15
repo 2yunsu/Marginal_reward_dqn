@@ -1,0 +1,18 @@
+env: "gymma_indep_rwd"
+
+env_args:
+  key: null
+  time_limit: 100
+  pretrained_wrapper: null
+  inner_args:
+    reward_share_wgt: 1.0
+  #   shelf_timeout_penalty: 100.0
+
+test_greedy: True
+test_nepisode: 100
+test_interval: 50000
+log_interval: 50000
+replay_interval: null   # 100000   # currently, this overrides the save_replay in default.yaml
+runner_log_interval: 50000
+learner_log_interval: 50000
+t_max: 2050000

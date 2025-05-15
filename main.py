@@ -6,7 +6,12 @@ import torch
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import wandb
+from tqdm import tqdm
+# from src.learners.ppo_learner import PPOLearner
 
+#yslee
+# from src.learners.ppo_learner import PPOLearner
 
 #random seed
 random_seed = 0
@@ -27,12 +32,14 @@ gamma = 0.9 #since it may take several moves to goal, making gamma high
 
 #model
 model = Q_learning(64, [150,150], 4, hidden_unit)
+# model = PPOLearner
 optimizer = optim.RMSprop(model.parameters(), lr = 1e-2)
 # optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
 criterion = torch.nn.MSELoss()
 memory = ReplayMemory(buffer)
 
 model_2 = Q_learning(64, [150,150], 4, hidden_unit)
+# model_2 = PPOLearner(64, [150,150], 4, hidden_unit)
 optimizer_2 = optim.RMSprop(model_2.parameters(), lr = 1e-2)
 # optimizer = optim.SGD(model.parameters(), lr = 0.1, momentum = 0)
 criterion_2 = torch.nn.MSELoss()
@@ -279,7 +286,7 @@ if __name__ == "__main__":
         #Train
         marginal_rate_train = round(marginal_rate_train, 1)
         trainAlgo(init, marginal_rate_train)
-
+        # wandb.init(project="gridworld", name="test ={}".format(marginal_rate_train))
         #Memory
         P1_reward_memory = []
         P2_reward_memory = []
@@ -299,6 +306,7 @@ if __name__ == "__main__":
                 if step <= end_step:
                     episode_memory += 1
                     step_memory.append(step)
+                # wandb.log({"P1_reward": P1_reward, "P2_reward": P2_reward, "P1_pair": P1_pair, "P2_pair": P2_pair}, step="step")
 
         Total_Utility = (np.mean(P1_reward_memory)+np.mean(P2_reward_memory))
         Total_pair = [item for tpl in (P1_pair_memory + P2_pair_memory) for item in tpl]
@@ -323,7 +331,8 @@ if __name__ == "__main__":
         print("step mean: ", np.mean(step_memory))
         print()
 
-        marginal_rate_train -= 0.1
+        # marginal_rate_train -= 0.1
+        marginal_rate_train += 0.1
     
     print("Total Utility mean: ", np.mean(Total_Utility_list))
     print("Std mean: ", np.mean(Std_list)) 

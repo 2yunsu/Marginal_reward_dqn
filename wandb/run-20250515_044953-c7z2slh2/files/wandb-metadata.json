@@ -1,0 +1,99 @@
+{
+  "os": "Linux-5.15.0-138-generic-x86_64-with-glibc2.17",
+  "python": "CPython 3.8.20",
+  "startedAt": "2025-05-14T19:49:53.298892Z",
+  "args": [
+    "clear"
+  ],
+  "program": "main.py",
+  "codePath": "main.py",
+  "git": {
+    "remote": "https://github.com/2yunsu/Marginal_reward_dqn.git",
+    "commit": "acbc7cf0bd697198981dec24f40fd42884fb615a"
+  },
+  "email": "2yunsu@snu.ac.kr",
+  "root": "/home/Marginal_reward_dqn",
+  "host": "99306373f1b2",
+  "executable": "/root/anaconda3/envs/marginal_dqn/bin/python",
+  "codePathLocal": "main.py",
+  "cpu_count": 24,
+  "cpu_count_logical": 48,
+  "gpu": "NVIDIA TITAN Xp",
+  "gpu_count": 10,
+  "disk": {
+    "/": {
+      "total": "1006449913856",
+      "used": "945494302720"
+    }
+  },
+  "memory": {
+    "total": "270333009920"
+  },
+  "cpu": {
+    "count": 24,
+    "countLogical": 48
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    }
+  ],
+  "cudaVersion": "12.2"
+}

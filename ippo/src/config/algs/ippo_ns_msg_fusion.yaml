@@ -1,0 +1,44 @@
+# --- IPPO NS specific parameters ---
+
+action_selector: "soft_policies_msg"
+mask_before_softmax: True
+
+runner: "parallel_msg_fusion"
+
+buffer_size: 16
+batch_size_run: 16
+batch_size: 16
+
+env_args:
+  state_last_action: False # critic adds last action internally
+
+# update the target network every {} training steps
+target_update_interval_or_tau: 0.1
+
+lr: 0.0005
+
+obs_agent_id: False
+obs_last_action: False
+obs_individual_obs: False
+
+obs_msg: True
+use_state_diff: True
+msg_loss_coef: 10.0
+msg_fusion: True
+msg_ext_len: 5
+msg_sd_len: 5
+
+mac: "non_shared_msg_fusion_mac"
+agent: "rnn_ns_msg"
+agent_output_type: "pi_logits"
+learner: "ppo_msg_fusion_learner"
+entropy_coef: 0.03
+standardise_rewards: True
+use_rnn: True
+epochs: 4
+eps_clip: 0.05
+q_nstep: 13 # 1 corresponds to normal r + gammaV
+critic_type: "ac_critic_ns_msg"
+name: "ippo_ns_msg_fusion"
+
+t_max: 20050000

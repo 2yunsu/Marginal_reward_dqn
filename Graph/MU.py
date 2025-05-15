@@ -9,14 +9,15 @@ rewards = [10.0*(0.8**(n-1)) for n in n_goal_2_values]
 
 # 그래프를 그립니다.
 plt.plot(n_goal_2_values, rewards, label='Reward', color='red', linestyle='solid', linewidth=2, marker='o', markersize=5)
-plt.xlabel('Number of goods')
-plt.ylabel('Utility')
-plt.title('Margianl Utility Graph')
+plt.xlabel(r'Number of goods, $n_{k}$')
+plt.ylabel(r'Marginal Utility, $MU_{x_k}$')
+plt.title('Marginal Utility Graph')
+plt.ylim(2, 11)
 
 # 각 지점에 reward 값을 표시합니다.
 for x, y in zip(n_goal_2_values, rewards):
-    plt.text(x, y, f'{y:.2f}', ha='right', va='top')
+    plt.text(x, y+0.3, f'{y:.2f}', ha='center', va='bottom')
 
 # 그래프를 이미지 파일로 저장합니다.
 plt.subplots_adjust(top=0.85)
-plt.savefig('MU_Graph.png')  # 파일 이름은 원하는 대로 지정하십시오.
+plt.savefig("MU_Graph.png")  # 파일 이름은 원하는 대로 지정하십시오.
